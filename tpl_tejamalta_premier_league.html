@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TPL | Tejamalta Premier League</title>
+<style>
+:root{--blue:#102a56;--blue2:#1f5fbf;--orange:#f28c28;--bg:#f3f6fb;--ink:#152238;--muted:#6b7890;--line:#dfe6f0}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(130deg,#0d2145,#174b91);color:#fff;padding:22px 16px 18px}
+.wrap{max-width:1000px;margin:auto}.brand{display:flex;align-items:center;gap:13px}.logo{width:54px;height:54px;border-radius:15px;background:var(--orange);display:grid;place-items:center;font-size:28px;box-shadow:0 6px 16px #06173555}
+h1{font-size:clamp(20px,4vw,30px);margin:0;letter-spacing:.3px}.subtitle{margin-top:5px;color:#d5e4fb;font-size:12px;letter-spacing:1.3px}
+header .tagline{margin:17px 0 0;color:#eaf1ff;font-size:14px}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 12px 0;max-width:1000px;margin:auto}
+nav button,.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer;white-space:nowrap}
+nav button{background:#e7edf7;color:#244066}nav button.active{background:var(--orange);color:#fff}
+main{max-width:1000px;margin:0 auto;padding:16px 12px 30px}.hero{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 6px 20px #15345d0a}
+.hero h2{margin:0 0 6px;font-size:22px}.hero p{margin:0;color:var(--muted);line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;min-width:0}.card h3{margin:0 0 12px}.stat{font-size:28px;font-weight:800;color:var(--blue2)}.small{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.btn{background:var(--blue2);color:#fff}.btn.orange{background:var(--orange)}.btn.light{background:#e9eef7;color:var(--blue)}.btn.danger{background:#b42318}
+select,input{padding:10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;max-width:100%;font:inherit}label{display:block;font-size:13px;font-weight:700;margin:10px 0 5px}
+table{width:100%;border-collapse:collapse;background:#fff}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:14px}th{background:#edf3fc;color:#28476f;font-size:12px;text-transform:uppercase;letter-spacing:.4px}tr:last-child td{border-bottom:0}.tablebox{overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff}
+.pill{display:inline-block;background:#fff0df;color:#984b00;border-radius:99px;padding:5px 9px;font-size:12px;font-weight:700}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.formgrid>div{min-width:0}.notice{padding:12px;border-radius:10px;background:#fff4e7;color:#804000;font-size:13px;line-height:1.5;margin:12px 0}
+footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong{color:var(--orange);letter-spacing:.5px}
+.hidden{display:none!important}.empty{padding:24px;text-align:center;color:var(--muted)}.teamgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.team{background:#fff;border:1px solid var(--line);padding:14px;border-radius:13px}.team h3{margin:0 0 8px;color:var(--blue)}.team p{margin:5px 0;font-size:13px}
+@media(max-width:560px){.cards,.teamgrid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}th,td{padding:9px 7px;font-size:12px}.hero{padding:15px}nav button{padding:10px 12px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><div class="logo">🏏</div><div><h1>TEJAMALTA PREMIER LEAGUE</h1><div class="subtitle">TPL • YOUR CRICKET. YOUR RECORDS.</div></div></div>
+  <div class="tagline">Runs. Wickets. Teams. Every season counts.</div>
+</div></header>
+<nav id="nav">
+<button class="active" data-page="home">Home</button><button data-page="current">Current Season</button><button data-page="alltime">All-Time Records</button><button data-page="teams">Teams</button><button data-page="history">Season History</button><button data-page="admin">Admin</button>
+</nav>
+<main>
+<section id="home" class="page">
+ <div class="hero"><span class="pill" id="seasonBadge">SEASON 4</span><h2 style="margin-top:12px">Welcome to TPL</h2><p>Tejamalta Premier League ka official statistics hub. Current season ke performance aur all-time career records yahan dekhein.</p></div>
+ <div class="cards">
+  <div class="card"><h3>🏏 Current Season Runs</h3><div class="stat" id="homeRuns">0</div><div class="small">Recorded runs this season</div></div>
+  <div class="card"><h3>🎯 Current Season Wickets</h3><div class="stat" id="homeWickets">0</div><div class="small">Recorded wickets this season</div></div>
+  <div class="card"><h3>🔥 All-Time Top Run Scorer</h3><div id="topBatter">No records yet</div></div>
+  <div class="card"><h3>⚡ All-Time Top Bowler</h3><div id="topBowler">No records yet</div></div>
+ </div>
+ <div class="notice">Fresh start: Season 4. Sample player data is not pre-filled. Add real scores through Admin after opening the site.</div>
+</section>
+<section id="current" class="page hidden">
+ <div class="hero"><h2>Current Season</h2><p>Current season ke runs aur wickets. Match ke baad Admin section se stats update karein.</p><label for="currentSeason">Season select karein</label><select id="currentSeason" onchange="render()"></select></div>
+ <div class="tabs"><button class="btn" onclick="showLeaderboard('current','runs')">Most Runs</button><button class="btn orange" onclick="showLeaderboard('current','wickets')">Most Wickets</button></div>
+ <div id="currentBoard"></div>
+</section>
+<section id="alltime" class="page hidden">
+ <div class="hero"><h2>All-Time Records</h2><p>Completed seasons ke career totals. Season complete karne ke baad approved season stats ek baar career totals mein add honge.</p></div>
+ <div class="tabs"><button class="btn" onclick="showLeaderboard('alltime','runs')">Top 10 • Runs</button><button class="btn orange" onclick="showLeaderboard('alltime','wickets')">Top 10 • Wickets</button></div>
+ <div id="alltimeBoard"></div>
+</section>
+<section id="teams" class="page hidden">
+ <div class="hero"><h2>Teams</h2><p>8 team slots. Captain, vice-captain aur squad details Admin section se bhar sakte hain.</p></div><div id="teamsList" class="teamgrid"></div>
+</section>
+<section id="history" class="page hidden">
+ <div class="hero"><h2>Season History</h2><p>Har season ke records alag save rahenge. Season choose karke uske runs aur wickets dekhein.</p><label for="historySeason">Season</label><select id="historySeason" onchange="renderHistory()"></select></div><div id="historyBoard"></div>
+</section>
+<section id="admin" class="page hidden">
+ <div class="hero"><h2>Admin • Update Records</h2><p>Yahan player stats, teams aur seasons manage karne ka basic prototype hai.</p><div class="notice"><strong>Prototype note:</strong> Data is saved in this browser on this device only. It is not yet a shared live website, and this demo does not have a secure login. Before public launch, add cloud database and protected admin authentication.</div></div>
+ <div class="card">
+ <h3>Season settings</h3><div class="formgrid"><div><label>Current season number</label><input id="seasonNum" type="number" min="4" value="4"></div><div><label>Season status</label><select id="seasonStatus"><option value="active">In progress</option><option value="completed">Completed</option></select></div></div><p><button class="btn" onclick="saveSeason()">Save season settings</button> <button class="btn orange" onclick="completeSeason()">Finalize season & add career totals</button></p>
+ <div class="small">Finalize only after checking all player stats. A season can be finalized once.</div>
+ </div>
+ <div class="card" style="margin-top:12px">
+ <h3>Add / update player stats</h3><div class="formgrid"><div><label>Player name</label><input id="playerName" placeholder="e.g. Suresh"></div><div><label>Team name (optional)</label><input id="playerTeam" placeholder="e.g. Team A"></div><div><label>Runs in selected season</label><input id="playerRuns" type="number" min="0" value="0"></div><div><label>Wickets in selected season</label><input id="playerWickets" type="number" min="0" value="0"></div></div><p><button class="btn" onclick="savePlayer()">Save player stats</button></p><div class="small">Same player name updates that player's current-season stats; use consistent spelling.</div>
+ </div>
+ <div class="card" style="margin-top:12px">
+ <h3>Team details</h3><div class="formgrid"><div><label>Team name</label><input id="teamName" placeholder="e.g. TPL Tigers"></div><div><label>Captain</label><input id="captain" placeholder="Captain name"></div><div><label>Vice-captain</label><input id="viceCaptain" placeholder="Vice-captain name"></div><div><label>Squad names (comma-separated)</label><input id="squad" placeholder="Player 1, Player 2, ..."></div></div><p><button class="btn" onclick="saveTeam()">Save team</button></p>
+ </div>
+ <div class="card" style="margin-top:12px"><h3>Current season player list</h3><div id="adminPlayers"></div><p><button class="btn light" onclick="exportData()">Export backup (JSON)</button> <button class="btn light" onclick="document.getElementById('importFile').click()">Import backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"></p></div>
+</section>
+</main>
+<footer>Crafted by <strong>SAAHO_7</strong> 🧡💙<br><span>TEJAMALTA PREMIER LEAGUE</span></footer>
+<script>
+const KEY='tpl_tejamalta_v1';
+let data=load();
+let boardMode={current:'runs',alltime:'runs'};
+function fresh(){return {currentSeason:4,seasons:[{number:4,status:'active',players:[],finalized:false}],career:{},teams:Array.from({length:8},(_,i)=>({name:'Team '+(i+1),captain:'',viceCaptain:'',squad:[]}))}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function season(n){let s=data.seasons.find(x=>x.number===Number(n));if(!s){s={number:Number(n),status:'active',players:[],finalized:false};data.seasons.push(s);data.seasons.sort((a,b)=>a.number-b.number)}return s}
+function selectedSeason(){return Number(document.getElementById('currentSeason')?.value||data.currentSeason)}
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function leaderboard(players,key){return [...players].filter(p=>Number(p[key])>0).sort((a,b)=>b[key]-a[key]||a.name.localeCompare(b.name)).slice(0,10)}
+function table(players,key){let label=key==='runs'?'Runs':'Wickets';let list=leaderboard(players,key);if(!list.length)return '<div class="empty">Abhi koi '+label.toLowerCase()+' record add nahi hua.</div>';return '<div class="tablebox"><table><thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>'+label+'</th></tr></thead><tbody>'+list.map((p,i)=>`<tr><td><strong>${i+1}</strong></td><td>${safe(p.name)}</td><td>${safe(p.team||'—')}</td><td><strong>${p[key]}</strong></td></tr>`).join('')+'</tbody></table></div>'}
+function showLeaderboard(section,key){boardMode[section]=key;render()}
+function navTo(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==page));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));if(page==='current')showLeaderboard('current',boardMode.current);if(page==='alltime')showLeaderboard('alltime',boardMode.alltime)}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>navTo(b.dataset.page)));
+function render(){
+ const sel=document.getElementById('currentSeason'),his=document.getElementById('historySeason');let nums=[...new Set([...data.seasons.map(s=>s.number),data.currentSeason])].sort((a,b)=>a-b);
+ if(sel){let old=Number(sel.value)||data.currentSeason;sel.innerHTML=nums.map(n=>`<option value="${n}">Season ${n}${season(n).status==='completed'?' • Completed':''}</option>`).join('');sel.value=nums.includes(old)?old:data.currentSeason}
+ if(his){let old=Number(his.value)||data.currentSeason;his.innerHTML=nums.map(n=>`<option value="${n}">Season ${n}</option>`).join('');his.value=nums.includes(old)?old:data.currentSeason}
+ const cur=season(selectedSeason());document.getElementById('seasonBadge').textContent='SEASON '+data.currentSeason;
+ document.getElementById('homeRuns').textContent=cur.players.reduce((a,p)=>a+(+p.runs||0),0);
+ document.getElementById('homeWickets').textContent=cur.players.reduce((a,p)=>a+(+p.wickets||0),0);
+ let bat=leaderboard(Object.entries(data.career).map(([name,p])=>({name,...p})),'runs')[0],bowl=leaderboard(Object.entries(data.career).map(([name,p])=>({name,...p})),'wickets')[0];
+ document.getElementById('topBatter').innerHTML=bat?`<div class="stat">${bat.runs}</div><strong>${safe(bat.name)}</strong><div class="small">career runs</div>`:'<div class="small">No finalized records yet</div>';
+ document.getElementById('topBowler').innerHTML=bowl?`<div class="stat">${bowl.wickets}</div><strong>${safe(bowl.name)}</strong><div class="small">career wickets</div>`:'<div class="small">No finalized records yet</div>';
+ document.getElementById('currentBoard').innerHTML=table(cur.players,boardMode.current);
+ document.getElementById('alltimeBoard').innerHTML=table(Object.entries(data.career).map(([name,p])=>({name,...p})),boardMode.alltime);
+ document.getElementById('teamsList').innerHTML=data.teams.map(t=>`<div class="team"><h3>${safe(t.name)}</h3><p><b>Captain:</b> ${safe(t.captain||'Not added')}</p><p><b>Vice-captain:</b> ${safe(t.viceCaptain||'Not added')}</p><p><b>Squad:</b> ${t.squad.length?t.squad.map(safe).join(', '):'Not added'}</p></div>`).join('');
+ document.getElementById('adminPlayers').innerHTML=cur.players.length?'<div class="tablebox"><table><thead><tr><th>Player</th><th>Runs</th><th>Wickets</th><th>Action</th></tr></thead><tbody>'+cur.players.map((p,i)=>`<tr><td>${safe(p.name)}</td><td>${p.runs}</td><td>${p.wickets}</td><td><button class="btn danger" onclick="deletePlayer(${i})">Delete</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">No players added yet.</div>';
+ renderHistory();
+}
+function renderHistory(){let n=Number(document.getElementById('historySeason')?.value||data.currentSeason),s=season(n);document.getElementById('historyBoard').innerHTML=`<div class="hero"><strong>Season ${n}</strong> · ${s.status==='completed'?'Completed':'In progress'} · ${s.finalized?'Career totals added':'Career totals not finalized'}</div><div class="card"><h3>Most Runs</h3>${table(s.players,'runs')}</div><div class="card" style="margin-top:12px"><h3>Most Wickets</h3>${table(s.players,'wickets')}</div>`}
+function saveSeason(){let n=Math.max(4,Number(document.getElementById('seasonNum').value)||4);data.currentSeason=n;let s=season(n);s.status=document.getElementById('seasonStatus').value;persist();alert('Season settings saved.')}
+function savePlayer(){let name=document.getElementById('playerName').value.trim();if(!name){alert('Player name likhein.');return}let s=season(selectedSeason());if(s.finalized){alert('Ye season finalize ho chuka hai. Career totals double-counting se bachane ke liye edits locked hain.');return}let p=s.players.find(x=>x.name.toLowerCase()===name.toLowerCase());let obj={name,team:document.getElementById('playerTeam').value.trim(),runs:Math.max(0,Number(document.getElementById('playerRuns').value)||0),wickets:Math.max(0,Number(document.getElementById('playerWickets').value)||0)};if(p)Object.assign(p,obj);else s.players.push(obj);persist();alert('Player stats saved.')}
+function deletePlayer(i){if(!confirm('Is player ki current season entry delete karein?'))return;let s=season(selectedSeason());if(s.finalized){alert('Finalized season locked hai.');return}s.players.splice(i,1);persist()}
+function saveTeam(){let name=document.getElementById('teamName').value.trim();if(!name){alert('Team name likhein.');return}let t=data.teams.find(x=>x.name.toLowerCase()===name.toLowerCase())||data.teams.find(x=>/^Team \\d+$/.test(x.name)&&!x.captain&&!x.squad.length);if(!t){alert('8 team slots bhar chuke hain. Kisi existing team ka exact name use karke update karein.');return}t.name=name;t.captain=document.getElementById('captain').value.trim();t.viceCaptain=document.getElementById('viceCaptain').value.trim();t.squad=document.getElementById('squad').value.split(',').map(x=>x.trim()).filter(Boolean);persist();alert('Team details saved.')}
+function completeSeason(){let s=season(selectedSeason());if(s.finalized){alert('Is season ke career totals pehle hi add ho chuke hain.');return}if(!confirm(`Season ${s.number} ko complete mark karke ${s.players.length} players ke stats career totals mein ek baar add karein? Pehle data check kar lein.`))return;s.players.forEach(p=>{if(!data.career[p.name])data.career[p.name]={runs:0,wickets:0};data.career[p.name].runs+=Number(p.runs)||0;data.career[p.name].wickets+=Number(p.wickets)||0});s.finalized=true;s.status='completed';if(data.currentSeason===s.number){data.currentSeason=s.number+1;season(data.currentSeason)}document.getElementById('seasonNum').value=data.currentSeason;persist();alert('Season finalized. Career totals updated once. New current season is Season '+data.currentSeason+'.')}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tpl-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.seasons||!x.career||!x.teams)throw Error();data=x;persist();alert('Backup imported.')}catch(err){alert('Invalid TPL backup file.')}};r.readAsText(f)}
+document.getElementById('seasonNum').value=data.currentSeason;document.getElementById('seasonStatus').value=season(data.currentSeason).status;render();
+</script>
+</body></html>
