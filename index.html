@@ -77,12 +77,12 @@ footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong
  <div class="card" style="margin-top:12px"><h3>Current season player list</h3><div id="adminPlayers"></div><p><button class="btn light" onclick="exportData()">Export backup (JSON)</button> <button class="btn light" onclick="document.getElementById('importFile').click()">Import backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"></p></div>
 </section>
 </main>
-<footer>Crafted by <strong>SAAHO_7</strong> 🧡💙<br><span>TEJAMALTA PREMIER LEAGUE</span></footer>
+<footer>Crafted by <strong>SAAHO_7</strong> <br><span>TEJAMALTA PREMIER LEAGUE</span></footer>
 <script>
 const KEY='tpl_tejamalta_v1';
 let data=load();
 let boardMode={current:'runs',alltime:'runs'};
-function fresh(){return {currentSeason:4,seasons:[{number:4,status:'active',players:[],finalized:false}],career:{},teams:Array.from({length:8},(_,i)=>({name:'Team '+(i+1),captain:'',viceCaptain:'',squad:[]}))}}
+function fresh(){return {currentSeason:3,seasons:[{number:3,status:'active',players:[],finalized:false}],career:{},teams:Array.from({length:8},(_,i)=>({name:'Team '+(i+1),captain:'',viceCaptain:'',squad:[]}))}}
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
 function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
 function season(n){let s=data.seasons.find(x=>x.number===Number(n));if(!s){s={number:Number(n),status:'active',players:[],finalized:false};data.seasons.push(s);data.seasons.sort((a,b)=>a.number-b.number)}return s}
