@@ -93,6 +93,7 @@ footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong
  <h3>Team details</h3><div class="formgrid"><div><label>Team name</label><input id="teamName" placeholder="e.g. TPL Tigers"></div><div><label>Captain</label><input id="captain" placeholder="Captain name"></div><div><label>Vice-captain</label><input id="viceCaptain" placeholder="Vice-captain name"></div><div><label>Squad names (comma-separated)</label><input id="squad" placeholder="Player 1, Player 2, ..."></div></div><p><button class="btn" onclick="saveTeam()">Save team</button></p>
  </div>
  <div class="card" style="margin-top:12px"><h3>Current season player list</h3><div id="adminPlayers"></div><p><button class="btn light" onclick="exportData()">Export backup (JSON)</button> <button class="btn light" onclick="document.getElementById('importFile').click()">Import backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"></p></div>
+</div>
 </section>
 </main>
 <footer>Crafted by <strong>SAAHO_7</strong> <br><span>TEJAMALTA PREMIER LEAGUE</span></footer>
