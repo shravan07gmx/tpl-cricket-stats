@@ -62,7 +62,24 @@ footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong
 <section id="history" class="page hidden">
  <div class="hero"><h2>Season History</h2><p>Har season ke records alag save rahenge. Season choose karke uske runs aur wickets dekhein.</p><label for="historySeason">Season</label><select id="historySeason" onchange="renderHistory()"></select></div><div id="historyBoard"></div>
 </section>
-<section id="admin" class="page hidden">
+<section id="admin" class="page hidden"> 
+<div id="adminLogin" class="card" style="max-width:500px;margin:20px auto;padding:20px">
+  <h2>Owner Login</h2>
+  <p>Only the TPL owner can update scores.</p>
+  <form id="ownerLoginForm">
+    <label for="ownerEmail">Email</label>
+    <input id="ownerEmail" type="email" required
+      autocomplete="username" placeholder="Owner email"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px">
+    <label for="ownerPassword">Password</label>
+    <input id="ownerPassword" type="password" required
+      autocomplete="current-password" placeholder="Password"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px">
+    <button type="submit">Login</button>
+    <p id="loginError" role="alert"></p>
+  </form>
+</div>
+ <div id="adminContent" style="display:none"> 
  <div class="hero"><h2>Admin • Update Records</h2><p>Yahan player stats, teams aur seasons manage karne ka basic prototype hai.</p><div class="notice"><strong>Prototype note:</strong> Data is saved in this browser on this device only. It is not yet a shared live website, and this demo does not have a secure login. Before public launch, add cloud database and protected admin authentication.</div></div>
  <div class="card">
  <h3>Season settings</h3><div class="formgrid"><div><label for="seasonNum">Current season number</label>
@@ -79,6 +96,10 @@ footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong
 </section>
 </main>
 <footer>Crafted by <strong>SAAHO_7</strong> <br><span>TEJAMALTA PREMIER LEAGUE</span></footer>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
 <script>
 const KEY='tpl_tejamalta_v1';
 let data=load();
