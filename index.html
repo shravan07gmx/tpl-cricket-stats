@@ -101,12 +101,105 @@ footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC5x3f72PZUGZ8HPnpzVytuTi03ex0xWyA",
+  authDomain: "tpl-cricket-stats.firebaseapp.com",
+  projectId: "tpl-cricket-stats",
+  storageBucket: "tpl-cricket-stats.firebasestorage.app",
+  messagingSenderId: "355718422359",
+  appId: "1:355718422359:web:25e9a6b4da566fcecb2812"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+const cloudDoc = db.collection("tpl").doc("main");
+const OWNER_UID = "bCOdd6rEqiYMmEpUDIZnj4RqJUR2";
+
+let isOwner = false;
+let cloudReady = false;
+
+document.getElementById("ownerLoginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = document.getElementById("loginError");
+  msg.textContent = "Logging in...";
+
+  try {
+    await auth.signInWithEmailAndPassword(
+      document.getElementById("ownerEmail").value.trim(),
+      document.getElementById("ownerPassword").value
+    );
+    msg.textContent = "";
+  } catch (err) {
+    msg.textContent = "Login failed: " + err.message;
+  }
+});
+
+auth.onAuthStateChanged(async user => {
+  isOwner = !!user && user.uid === OWNER_UID;
+
+  document.getElementById("adminLogin").style.display =
+    isOwner ? "none" : "block";
+
+  document.getElementById("adminContent").style.display =
+    isOwner ? "block" : "none";
+
+  if (user && !isOwner) {
+    await auth.signOut();
+    document.getElementById("loginError").textContent =
+      "This account is not authorized.";
+    return;
+  }
+
+  if (isOwner) {
+    try {
+      const snap = await cloudDoc.get();
+
+      if (!snap.exists) {
+        // First cloud save: use existing browser data.
+        await cloudDoc.set(data);
+      } else {
+        data = snap.data();
+        localStorage.setItem(KEY, JSON.stringify(data));
+        render();
+      }
+
+      cloudReady = true;
+    } catch (err) {
+      document.getElementById("loginError").textContent =
+        "Cloud error: " + err.message;
+    }
+  }
+});
+
+cloudDoc.onSnapshot(snap => {
+  if (!snap.exists || !cloudReady) return;
+
+  data = snap.data();
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render();
+}, err => console.error("Cloud sync error:", err));
 const KEY='tpl_tejamalta_v1';
 let data=load();
 let boardMode={current:'runs',alltime:'runs'};
 function fresh(){return {currentSeason:3,seasons:[{number:3,status:'active',players:[],finalized:false}],career:{},teams:Array.from({length:8},(_,i)=>({name:'Team '+(i+1),captain:'',viceCaptain:'',squad:[]}))}}
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
-function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function persist() {
+  if (!isOwner) {
+    alert("Owner login required.");
+    return;
+  }
+
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render();
+
+  if (cloudReady) {
+    cloudDoc.set(data).catch(err => {
+      alert("Cloud save failed: " + err.message);
+    });
+  }
+}
 function season(n){let s=data.seasons.find(x=>x.number===Number(n));if(!s){s={number:Number(n),status:'active',players:[],finalized:false};data.seasons.push(s);data.seasons.sort((a,b)=>a.number-b.number)}return s}
 function selectedSeason(){return Number(document.getElementById('currentSeason')?.value||data.currentSeason)}
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
