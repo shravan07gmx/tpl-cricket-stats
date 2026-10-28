@@ -65,7 +65,8 @@ footer{text-align:center;padding:20px;color:#78859a;font-size:12px}footer strong
 <section id="admin" class="page hidden">
  <div class="hero"><h2>Admin • Update Records</h2><p>Yahan player stats, teams aur seasons manage karne ka basic prototype hai.</p><div class="notice"><strong>Prototype note:</strong> Data is saved in this browser on this device only. It is not yet a shared live website, and this demo does not have a secure login. Before public launch, add cloud database and protected admin authentication.</div></div>
  <div class="card">
- <h3>Season settings</h3><div class="formgrid"><div><label>Current season number</label><input id="seasonNum" type="number" min="4" value="4"></div><div><label>Season status</label><select id="seasonStatus"><option value="active">In progress</option><option value="completed">Completed</option></select></div></div><p><button class="btn" onclick="saveSeason()">Save season settings</button> <button class="btn orange" onclick="completeSeason()">Finalize season & add career totals</button></p>
+ <h3>Season settings</h3><div class="formgrid"><div><label for="seasonNum">Current season number</label>
+<input id="seasonNum" type="number" min="3" value="3"></div><div><label>Season status</label><select id="seasonStatus"><option value="active">In progress</option><option value="completed">Completed</option></select></div></div><p><button class="btn" onclick="saveSeason()">Save season settings</button> <button class="btn orange" onclick="completeSeason()">Finalize season & add career totals</button></p>
  <div class="small">Finalize only after checking all player stats. A season can be finalized once.</div>
  </div>
  <div class="card" style="margin-top:12px">
@@ -110,10 +111,34 @@ function render(){
  renderHistory();
 }
 function renderHistory(){let n=Number(document.getElementById('historySeason')?.value||data.currentSeason),s=season(n);document.getElementById('historyBoard').innerHTML=`<div class="hero"><strong>Season ${n}</strong> · ${s.status==='completed'?'Completed':'In progress'} · ${s.finalized?'Career totals added':'Career totals not finalized'}</div><div class="card"><h3>Most Runs</h3>${table(s.players,'runs')}</div><div class="card" style="margin-top:12px"><h3>Most Wickets</h3>${table(s.players,'wickets')}</div>`}
-function saveSeason(){let n=Math.max(4,Number(document.getElementById('seasonNum').value)||4);data.currentSeason=n;let s=season(n);s.status=document.getElementById('seasonStatus').value;persist();alert('Season settings saved.')}
+function saveSeason(){let n=Math.max(3,Number(document.getElementById('seasonNum').value)||3);data.currentSeason=n;let s=season(n);s.status=document.getElementById('seasonStatus').value;persist();alert('Season settings saved.')}
 function savePlayer(){let name=document.getElementById('playerName').value.trim();if(!name){alert('Player name likhein.');return}let s=season(selectedSeason());if(s.finalized){alert('Ye season finalize ho chuka hai. Career totals double-counting se bachane ke liye edits locked hain.');return}let p=s.players.find(x=>x.name.toLowerCase()===name.toLowerCase());let obj={name,team:document.getElementById('playerTeam').value.trim(),runs:Math.max(0,Number(document.getElementById('playerRuns').value)||0),wickets:Math.max(0,Number(document.getElementById('playerWickets').value)||0)};if(p)Object.assign(p,obj);else s.players.push(obj);persist();alert('Player stats saved.')}
 function deletePlayer(i){if(!confirm('Is player ki current season entry delete karein?'))return;let s=season(selectedSeason());if(s.finalized){alert('Finalized season locked hai.');return}s.players.splice(i,1);persist()}
 function saveTeam(){let name=document.getElementById('teamName').value.trim();if(!name){alert('Team name likhein.');return}let t=data.teams.find(x=>x.name.toLowerCase()===name.toLowerCase())||data.teams.find(x=>/^Team \\d+$/.test(x.name)&&!x.captain&&!x.squad.length);if(!t){alert('8 team slots bhar chuke hain. Kisi existing team ka exact name use karke update karein.');return}t.name=name;t.captain=document.getElementById('captain').value.trim();t.viceCaptain=document.getElementById('viceCaptain').value.trim();t.squad=document.getElementById('squad').value.split(',').map(x=>x.trim()).filter(Boolean);persist();alert('Team details saved.')}
 function completeSeason(){let s=season(selectedSeason());if(s.finalized){alert('Is season ke career totals pehle hi add ho chuke hain.');return}if(!confirm(`Season ${s.number} ko complete mark karke ${s.players.length} players ke stats career totals mein ek baar add karein? Pehle data check kar lein.`))return;s.players.forEach(p=>{if(!data.career[p.name])data.career[p.name]={runs:0,wickets:0};data.career[p.name].runs+=Number(p.runs)||0;data.career[p.name].wickets+=Number(p.wickets)||0});s.finalized=true;s.status='completed';if(data.currentSeason===s.number){data.currentSeason=s.number+1;season(data.currentSeason)}document.getElementById('seasonNum').value=data.currentSeason;persist();alert('Season finalized. Career totals updated once. New current season is Season '+data.currentSeason+'.')}
 function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tpl-backup.json';a.click();URL.revokeObjectURL(a.href)}
-function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.seasons||!x.career||!x.teams)throw Error();data=x;persist();alert('Backup imported.')}
+
+function importData(e){
+  let f=e.target.files[0];
+  if(!f)return;
+  let r=new FileReader();
+  r.onload=()=>{
+    try{
+      let x=JSON.parse(r.result);
+      if(!x.seasons||!x.career||!x.teams)throw Error();
+      data=x;
+      persist();
+      alert('Backup imported.');
+    }catch(err){
+      alert('Backup file sahi nahi hai.');
+    }
+    e.target.value='';
+  };
+  r.readAsText(f);
+}
+
+render();
+</script>
+</body>
+</html>
+
