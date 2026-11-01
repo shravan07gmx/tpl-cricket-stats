@@ -175,12 +175,26 @@ auth.onAuthStateChanged(async user => {
 });
 
 cloudDoc.onSnapshot(snap => {
-  if (!snap.exists || !cloudReady) return;
+  if (!snap.exists) return;
 
-  data = snap.data();
+  const cloudData = snap.data();
+
+  if (
+    !cloudData ||
+    !Array.isArray(cloudData.seasons) ||
+    !cloudData.career ||
+    !Array.isArray(cloudData.teams)
+  ) return;
+
+  data = cloudData;
+  cloudReady = true;
+
   localStorage.setItem(KEY, JSON.stringify(data));
   render();
-}, err => console.error("Cloud sync error:", err));
+
+}, err => {
+  console.error("Cloud sync error:", err);
+});
 const KEY='tpl_tejamalta_v1';
 let data=load();
 let boardMode={current:'runs',alltime:'runs'};
