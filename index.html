@@ -236,6 +236,22 @@ function season(n){let s=data.seasons.find(x=>x.number===Number(n));if(!s){s={nu
 function selectedSeason(){return Number(document.getElementById('currentSeason')?.value||data.currentSeason)}
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function leaderboard(players,key){return [...players].filter(p=>Number(p[key])>0).sort((a,b)=>b[key]-a[key]||a.name.localeCompare(b.name)).slice(0,10)}
+  function homeTopFive(players,key){
+  let list=leaderboard(players,key).slice(0,5);
+
+  if(!list.length){
+    return '<div class="empty">Abhi koi record nahi hai.</div>';
+  }
+
+  return '<div style="display:grid;gap:9px">'+
+    list.map((p,i)=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px">
+        <span><strong>${i+1}.</strong> ${safe(p.name)}</span>
+        <strong style="color:var(--blue2);white-space:nowrap">${Number(p[key])} ${key==='runs'?'runs':'wickets'}</strong>
+      </div>
+    `).join('')+
+  '</div>';
+  }
 function table(players,key){let label=key==='runs'?'Runs':'Wickets';let list=leaderboard(players,key);if(!list.length)return '<div class="empty">Abhi koi '+label.toLowerCase()+' record add nahi hua.</div>';return '<div class="tablebox"><table><thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>'+label+'</th></tr></thead><tbody>'+list.map((p,i)=>`<tr><td><strong>${i+1}</strong></td><td>${safe(p.name)}</td><td>${safe(p.team||'—')}</td><td><strong>${p[key]}</strong></td></tr>`).join('')+'</tbody></table></div>'}
 function showLeaderboard(section,key){boardMode[section]=key;render()}
 function navTo(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==page));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));if(page==='current')showLeaderboard('current',boardMode.current);if(page==='alltime')showLeaderboard('alltime',boardMode.alltime)}
