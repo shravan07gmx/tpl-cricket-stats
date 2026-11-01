@@ -261,11 +261,23 @@ function render(){
  if(sel){let old=Number(sel.value)||data.currentSeason;sel.innerHTML=nums.map(n=>`<option value="${n}">Season ${n}${season(n).status==='completed'?' • Completed':''}</option>`).join('');sel.value=nums.includes(old)?old:data.currentSeason}
  if(his){let old=Number(his.value)||data.currentSeason;his.innerHTML=nums.map(n=>`<option value="${n}">Season ${n}</option>`).join('');his.value=nums.includes(old)?old:data.currentSeason}
  const cur=season(selectedSeason());document.getElementById('seasonBadge').textContent='SEASON '+data.currentSeason;
- document.getElementById('homeRuns').textContent=cur.players.reduce((a,p)=>a+(+p.runs||0),0);
- document.getElementById('homeWickets').textContent=cur.players.reduce((a,p)=>a+(+p.wickets||0),0);
- let bat=leaderboard(Object.entries(data.career).map(([name,p])=>({name,...p})),'runs')[0],bowl=leaderboard(Object.entries(data.career).map(([name,p])=>({name,...p})),'wickets')[0];
- document.getElementById('topBatter').innerHTML=bat?`<div class="stat">${bat.runs}</div><strong>${safe(bat.name)}</strong><div class="small">career runs</div>`:'<div class="small">No finalized records yet</div>';
- document.getElementById('topBowler').innerHTML=bowl?`<div class="stat">${bowl.wickets}</div><strong>${safe(bowl.name)}</strong><div class="small">career wickets</div>`:'<div class="small">No finalized records yet</div>';
+ // Home page: current season Top 5
+const homeCurrent=season(data.currentSeason);
+
+document.getElementById('homeRuns').innerHTML=
+  homeTopFive(homeCurrent.players,'runs');
+
+document.getElementById('homeWickets').innerHTML=
+  homeTopFive(homeCurrent.players,'wickets');
+
+const careerPlayers=Object.entries(data.career)
+  .map(([name,p])=>({name,...p}));
+
+document.getElementById('topBatter').innerHTML=
+  homeTopFive(careerPlayers,'runs');
+
+document.getElementById('topBowler').innerHTML=
+  homeTopFive(careerPlayers,'wickets');
  document.getElementById('currentBoard').innerHTML=table(cur.players,boardMode.current);
  document.getElementById('alltimeBoard').innerHTML=table(Object.entries(data.career).map(([name,p])=>({name,...p})),boardMode.alltime);
  document.getElementById('teamsList').innerHTML=data.teams.map(t=>`<div class="team"><h3>${safe(t.name)}</h3><p><b>Captain:</b> ${safe(t.captain||'Not added')}</p><p><b>Vice-captain:</b> ${safe(t.viceCaptain||'Not added')}</p><p><b>Squad:</b> ${t.squad.length?t.squad.map(safe).join(', '):'Not added'}</p></div>`).join('');
